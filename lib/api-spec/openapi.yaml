@@ -1,0 +1,328 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: leads
+    description: Enterprise lead capture
+  - name: catalog
+    description: Programs and solutions catalog
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /leads:
+    post:
+      operationId: createLead
+      tags: [leads]
+      summary: Submit an enterprise training lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Lead captured
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadResponse"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      operationId: listLeads
+      tags: [leads]
+      summary: List recent leads (admin / demo only)
+      responses:
+        "200":
+          description: Recent leads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lead"
+  /catalog/programs:
+    get:
+      operationId: listPrograms
+      tags: [catalog]
+      summary: List all enterprise learning programs
+      responses:
+        "200":
+          description: Programs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Program"
+  /catalog/solutions:
+    get:
+      operationId: listSolutions
+      tags: [catalog]
+      summary: List enterprise solutions
+      responses:
+        "200":
+          description: Solutions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Solution"
+  /catalog/stats:
+    get:
+      operationId: getStats
+      tags: [catalog]
+      summary: Aggregate impact stats
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stats"
+  /catalog/testimonials:
+    get:
+      operationId: listTestimonials
+      tags: [catalog]
+      summary: List enterprise testimonials
+      responses:
+        "200":
+          description: Testimonials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Testimonial"
+  /catalog/faqs:
+    get:
+      operationId: listFaqs
+      tags: [catalog]
+      summary: List frequently asked questions
+      responses:
+        "200":
+          description: FAQs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Faq"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    LeadInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+        company:
+          type: string
+          minLength: 1
+        phone:
+          type: string
+        teamSize:
+          type: string
+          description: Approximate number of employees to train
+        trainingArea:
+          type: string
+          description: Primary training requirement (e.g., Data Science, Leadership)
+        message:
+          type: string
+      required:
+        - name
+        - email
+        - company
+        - trainingArea
+    Lead:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        company:
+          type: string
+        phone:
+          type: string
+        teamSize:
+          type: string
+        trainingArea:
+          type: string
+        message:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - email
+        - company
+        - trainingArea
+        - createdAt
+    LeadResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        lead:
+          $ref: "#/components/schemas/Lead"
+      required:
+        - message
+        - lead
+    Program:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        category:
+          type: string
+        duration:
+          type: string
+        level:
+          type: string
+        description:
+          type: string
+        outcomes:
+          type: array
+          items:
+            type: string
+        modules:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - title
+        - category
+        - duration
+        - level
+        - description
+        - outcomes
+        - modules
+    Solution:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        tagline:
+          type: string
+        description:
+          type: string
+        highlights:
+          type: array
+          items:
+            type: string
+        accent:
+          type: string
+          description: Hex color or palette key for visual accent
+      required:
+        - id
+        - title
+        - tagline
+        - description
+        - highlights
+        - accent
+    Stats:
+      type: object
+      properties:
+        professionalsTrained:
+          type: integer
+        batchesLaunched:
+          type: integer
+        satisfactionScore:
+          type: number
+        enterprisePartners:
+          type: integer
+        countriesReached:
+          type: integer
+        learningHours:
+          type: integer
+      required:
+        - professionalsTrained
+        - batchesLaunched
+        - satisfactionScore
+        - enterprisePartners
+        - countriesReached
+        - learningHours
+    Testimonial:
+      type: object
+      properties:
+        id:
+          type: string
+        quote:
+          type: string
+        author:
+          type: string
+        role:
+          type: string
+        company:
+          type: string
+      required:
+        - id
+        - quote
+        - author
+        - role
+        - company
+    Faq:
+      type: object
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+        answer:
+          type: string
+      required:
+        - id
+        - question
+        - answer

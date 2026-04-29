@@ -1,0 +1,196 @@
+Must-have sections
+
+Your page should include:
+
+Navbar
+Logo
+Links: Home, Solutions, Programs, Why Accredian, Contact
+CTA button: “Book a Demo” or “Talk to Expert”
+Mobile hamburger menu
+Hero Section
+B2B headline, for example:
+“Empower Your Workforce with Future-Ready Skills”
+Short description
+CTA buttons: “Book a Demo” and “Explore Programs”
+Right-side visual/card/dashboard style
+Client/Partner Logos
+Use placeholder company logos or text-based cards
+Don’t use copyrighted assets directly unless allowed
+Enterprise Solutions Section
+Cards like:
+Data & AI Training
+Leadership Programs
+Technology Upskilling
+Custom Learning Paths
+Why Choose Accredian
+Use 3–4 benefit cards:
+Custom programs
+Expert mentors
+Real business outcomes
+Scalable employee training
+Programs / Learning Tracks
+Cards for:
+Data Science
+AI & ML
+Product Management
+Digital Transformation
+Leadership
+Stats Section
+Example:
+5000+ professionals trained
+30+ batches launched
+4.5/5 satisfaction
+Accredian’s public About page shows similar stats like professionals trained, class hours, batches launched, and satisfaction score, so this type of section fits their brand style.
+Lead Capture Form — Bonus
+Name
+Work email
+Company
+Phone
+Training requirement
+Submit button
+FAQ Section
+4–5 common questions
+Footer
+Company links
+Contact
+Social links
+Copyright
+Recommended tech approach
+
+Use:
+
+npx create-next-app@latest accredian-enterprise-clone
+
+Choose:
+
+TypeScript: Yes
+ESLint: Yes
+Tailwind CSS: Yes
+App Router: Yes
+src directory: Yes
+Import alias: Yes
+
+Next.js officially recommends the App Router for modern project structure, layouts, pages, and routing conventions.
+
+For the bonus API form, use a Next.js Route Handler inside the app directory. Route Handlers are the App Router equivalent of API routes and let you create custom request handlers using the Web Request/Response APIs.
+
+Best folder structure
+
+Use this structure:
+
+src/
+  app/
+    api/
+      leads/
+        route.ts
+    globals.css
+    layout.tsx
+    page.tsx
+
+  components/
+    Navbar.tsx
+    Hero.tsx
+    LogoStrip.tsx
+    Solutions.tsx
+    Programs.tsx
+    WhyChooseUs.tsx
+    Stats.tsx
+    LeadForm.tsx
+    FAQ.tsx
+    Footer.tsx
+    SectionHeading.tsx
+
+  data/
+    programs.ts
+    solutions.ts
+    faqs.ts
+
+This will look clean to evaluators because the assignment specifically asks for reusable components and structured UI.
+
+API integration idea
+
+For the mandatory “API integration”, do this:
+
+Option 1: Mock API for programs
+
+Create static data in data/programs.ts and fetch/render it.
+
+Option 2: Better bonus API
+
+Create:
+
+src/app/api/leads/route.ts
+
+When the user submits the lead form, send data to /api/leads.
+
+You can store it temporarily in memory or simply return success:
+
+import { NextResponse } from "next/server";
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    if (!body.name || !body.email || !body.company) {
+      return NextResponse.json(
+        { message: "Name, email and company are required." },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        message: "Lead captured successfully",
+        lead: body,
+      },
+      { status: 201 }
+    );
+  } catch {
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 500 }
+    );
+  }
+}
+
+This satisfies the bonus: lead capture form + data via API route.
+
+UI style you should aim for
+
+Use a clean enterprise SaaS design, not a student-looking page.
+
+Recommended style:
+
+Color theme:
+- White background
+- Blue primary color
+- Light blue gradient sections
+- Dark navy text
+- Rounded cards
+- Soft shadows
+- Clean spacing
+
+Layout:
+- Max width container
+- Grid cards
+- Responsive breakpoints
+- Sticky navbar
+- Smooth scroll
+
+Add this in globals.css:
+
+html {
+  scroll-behavior: smooth;
+}
+What to write in submission under AI usage
+
+Use this:
+
+I used AI tools such as ChatGPT to understand the assignment requirements, break down the reference website structure, plan the component architecture, generate initial section ideas, and create reusable component patterns. I manually customized the UI, improved responsiveness, adjusted spacing, refined the content, connected the lead capture form with a Next.js API route, tested the mobile layout, and deployed the final project on Vercel.
+
+This sounds honest and matches the assignment’s AI requirement.
+Final build target
+
+Your final project should feel like:
+
+“A modern B2B enterprise training landing page for Accredian, built with Next.js App Router, Tailwind CSS, reusable components, responsive design, smooth section navigation, and a functional lead capture API.”
