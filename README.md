@@ -50,7 +50,7 @@ artifacts/accredian-enterprise
 - Smooth section navigation.
 - Reusable section and UI components.
 - API routes for catalog content, health checks, and lead submission.
-- Lead submission endpoint with schema validation.
+- Lead submission endpoint with schema validation and mock fallback when no database is configured.
 
 ## AI Usage
 

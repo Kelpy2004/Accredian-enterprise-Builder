@@ -34,6 +34,28 @@ export async function POST(req: Request) {
   }
 
   const input = parsed.data;
+  const hasDatabase = Boolean(process.env.DATABASE_URL);
+
+  if (!hasDatabase) {
+    return NextResponse.json(
+      {
+        message:
+          "Thanks - our enterprise team will reach out within 1 business day.",
+        lead: {
+          id: crypto.randomUUID(),
+          name: input.name,
+          email: input.email,
+          company: input.company,
+          phone: emptyToNull(input.phone) ?? undefined,
+          teamSize: emptyToNull(input.teamSize) ?? undefined,
+          trainingArea: input.trainingArea,
+          message: emptyToNull(input.message) ?? undefined,
+          createdAt: new Date().toISOString(),
+        },
+      },
+      { status: 201 },
+    );
+  }
 
   try {
     const [inserted] = await db
@@ -79,6 +101,10 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
+  if (!process.env.DATABASE_URL) {
+    return NextResponse.json([]);
+  }
+
   try {
     const rows = await db
       .select()
